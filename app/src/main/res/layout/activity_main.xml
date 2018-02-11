@@ -50,22 +50,17 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tvTimeZone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_timezone"/>
-        <TextView
             android:id="@+id/tvLat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvTimeZone"
-            android:hint="@string/hint_latitude"/>
+            android:hint="@string/hint_latitude"
+            />
         <View
             android:id="@+id/divider_vertical"
             android:layout_height="16dp"
             android:layout_width="1dp"
             android:layout_centerInParent="true"
-            android:layout_below="@+id/tvTimeZone"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="@color/colorAccent" />
@@ -75,8 +70,21 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_longtitude"
             android:layout_centerHorizontal="true"
-            android:layout_toRightOf="@id/divider_vertical"
-            android:layout_below="@+id/tvTimeZone"/>
+            android:layout_toRightOf="@id/divider_vertical"/>
+        <Button
+            android:id="@+id/btn_getTimeZone"
+            android:text="@string/text_timezone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@id/divider_vertical"/>
+        <TextView
+            android:id="@+id/tvTimeZone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_timezone"
+            android:layout_below="@id/btn_getTimeZone"/>
+
     </RelativeLayout>
 
     <View

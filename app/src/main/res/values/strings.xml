@@ -11,7 +11,7 @@
     <string name="hint_sunset">Sunset:</string>
     <string name="hint_timezone">Time zone:</string>
     <string name="hint_date">Date:</string>
-    <string name="text_timezone">Time zone: %s</string>
+    <string name="text_timezone">Time zone</string>
     <!--<string name="text_latitude">Latitude: %s</string>-->
     <!--<string name="text_longtitude">Longtitude: %s</string>-->
     <string name="btn_search_sunrise">Search for sunrise/sunset info</string>

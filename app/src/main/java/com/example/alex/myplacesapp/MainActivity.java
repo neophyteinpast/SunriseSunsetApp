@@ -21,10 +21,12 @@ import com.example.alex.myplacesapp.model.Location;
 import com.example.alex.myplacesapp.model.PlaceData;
 import com.example.alex.myplacesapp.model.SunriseSunset;
 import com.example.alex.myplacesapp.model.TimeZoneOffset;
+import com.example.alex.myplacesapp.model.time_zone.TimeZoneData;
 import com.example.alex.myplacesapp.service.DateService;
 import com.example.alex.myplacesapp.service.PlaceDataClient;
 import com.example.alex.myplacesapp.service.ServiceGenerator;
 import com.example.alex.myplacesapp.service.SunriseSunsetClient;
+import com.example.alex.myplacesapp.service.TimeZoneClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -34,6 +36,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +59,8 @@ public class MainActivity extends AppCompatActivity
 
     @BindView(R.id.btn_getPlace)
     Button mGetPlaceBtn;
+    @BindView(R.id.btn_getTimeZone)
+    Button mTimeZonebtn;
 
     @BindView(R.id.tvDate)
     TextView mDateTv;
@@ -90,6 +95,7 @@ public class MainActivity extends AppCompatActivity
                  .build();
         mGetPlaceBtn.setOnClickListener(this);
         mDateTv.setOnClickListener(this);
+        mTimezone.setOnClickListener(this);
 
         mDateTv.setText(DateService.getCurrentDate()); // set current date
         mPlaceDataClient = ServiceGenerator.createService(PlaceDataClient.class);
@@ -138,6 +144,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getPlaceData(CharSequence placeId) {
+        Log.d(TAG, "getPlaceData():");
         Resources resources = getResources();
         Call<PlaceData> call = mPlaceDataClient
                 .getPlace(placeId, resources.getString(R.string.key_browser));
@@ -147,12 +154,16 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, "Connected successful!", Toast.LENGTH_LONG).show();
                 PlaceData placeData = response.body();
                 Location location = placeData.getResult().getGeometry().getLocation();
-                String timeZone = TimeZoneOffset.findTimeZone(mPlace.getName().toString());
+//                String timeZone = TimeZoneOffset.findTimeZone(mPlace.getName().toString());
 
-                // search for sunrise sunset information
-                searchForSunriseSunset(location.round(location.getLat(), 8),
-                        location.round(location.getLng(), 8),
-                        DateService.getDateFormat(mDateTv.getText().toString()), 0, timeZone);
+                // connect to Google Timezone API
+                mTimezone.setVisibility(View.VISIBLE);
+                getTimeZoneData(location, mDateTv.getText().toString());
+
+//                // search for sunrise sunset information
+//                searchForSunriseSunset(location.round(location.getLat(), 8),
+//                        location.round(location.getLng(), 8),
+//                        DateService.getDateFormat(mDateTv.getText().toString()), 0, timeZone);
             }
 
             @Override
@@ -163,10 +174,42 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    private void getTimeZoneData(Location location, String date) {
+        Log.d(TAG, "getTimeZoneData():");
+        String url = "https://maps.googleapis.com/maps/api/timezone/json?";
+        Resources resources = getResources();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        TimeZoneClient timeZoneClient =
+                ServiceGenerator.createService(TimeZoneClient.class);
+        Call<TimeZoneData> call =
+                timeZoneClient.getTimeZone(url, location, timestamp.getTime()/1000,
+                        resources.getString(R.string.key_browser));
+        call.enqueue(new Callback<TimeZoneData>() {
+            @Override
+            public void onResponse(Call<TimeZoneData> call, Response<TimeZoneData> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "response.isSuccessful(): true");
+                    TimeZoneData timeZoneData = response.body();
+                    String timeZone = timeZoneData.getTimeZoneId();
+
+                    // search for sunrise sunset information
+                    searchForSunriseSunset(location.round(location.getLat(), 8),
+                            location.round(location.getLng(), 8),
+                            DateService.getDateFormat(mDateTv.getText().toString()), 0, timeZone);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TimeZoneData> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Error:(", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void searchForSunriseSunset(double lat, double lng, String date, Integer formatted,
                                         @NonNull String timeZone) {
+        Log.d(TAG, "searchForSunriseSunset():");
         String url = "https://api.sunrise-sunset.org/json";
-        Resources resources = getResources();
 
         SunriseSunsetClient sunriseSunsetClient =
                 ServiceGenerator.createService(SunriseSunsetClient.class);
@@ -180,13 +223,13 @@ public class MainActivity extends AppCompatActivity
                 String sunriseRealTime =
                         DateService.getZoneTime(sunriseSunset.getResults().getSunrise(), timeZone);
                 String sunsetRealTime =
-                        DateService.getZoneTime(sunriseSunset.getResults().getSunrise(), timeZone);
+                        DateService.getZoneTime(sunriseSunset.getResults().getSunset(), timeZone);
 
                 // set retrieved data to UI
                 displayPlace(mPlace);
                 mLatTv.setText(String.valueOf(lat));
                 mLngTv.setText(String.valueOf(lng));
-                mTimezone.setText(resources.getString(R.string.text_timezone, timeZone));
+                mTimezone.setText(timeZone);
                 mSunriseTv.setText(sunriseRealTime);
                 mSunsetTv.setText(sunsetRealTime);
             }

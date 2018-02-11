@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 /**
  * Created by Alex on 01.02.2018.
@@ -31,6 +32,11 @@ public class Location {
 
     public void setLng(Double lng) {
         this.lng = lng;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.ENGLISH, "%.1f,%.2f", lat, lng);
     }
 
     public Double round(Double value, int places) {
