@@ -57,6 +57,7 @@ dependencies {
 
     compile "com.google.android.gms:play-services-places:${googlePlayServiceVersion}"
     compile "com.google.android.gms:play-services-location:${googlePlayServiceVersion}"
+    compile "com.google.android.gms:play-services-maps:${googlePlayServiceVersion}"
 
     compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     compile "com.squareup.retrofit2:converter-gson:${retrofitVersion}"

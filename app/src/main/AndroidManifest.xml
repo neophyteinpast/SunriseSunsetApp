@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,7 +21,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/key_api"/>
-        <activity android:name="com.example.alex.myplacesapp.MainActivity">
+        <activity android:name="com.example.alex.myplacesapp.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

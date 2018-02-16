@@ -22,14 +22,13 @@ import java.util.Locale;
  */
 
 public class DateService {
-    public static final String TAG = DateService.class.getSimpleName();
+    private static final String TAG = DateService.class.getSimpleName();
     private static final String DATE_FORMAT = "y-MM-dd";
     private static final String PARSE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss+00:00";
     private static final String TIME_FORMAT = "hh:mm:ss a";
 
     public static String getCurrentDate() {
         Date currentDate = new Date();
-        Log.d(TAG, "getCurrentDate(): " + new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(currentDate));
         return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(currentDate);
     }
 
@@ -65,5 +64,30 @@ public class DateService {
         LocalTime localTime = correctedOffsetDateTime.toLocalTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         return localTime.format(formatter);
+    }
+
+    public static String getTime(long seconds) {
+        LocalTime localTime = LocalTime.ofSecondOfDay(seconds);
+        int hours = localTime.getHour();
+        int minutes = localTime.getMinute();
+        return String.format("Day length: %d hours, %d minutes", hours, minutes);
+    }
+
+    public static String getFormattedDateTime(String dateInString, String timeZone) {
+        ZoneId zoneId = ZoneId.of(timeZone);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
+        LocalDateTime localDateTime = LocalDateTime.now(zoneId);
+        String timeInString = localDateTime.format(dateTimeFormatter);
+        return String.format(
+                "%s. Current time: %s.",
+                getFormattedDate(dateInString), timeInString);
+    }
+
+    private static String getFormattedDate(String dateInString) {
+        LocalDate localDate = LocalDate.parse(dateInString);
+        String monthName = localDate.getMonth().name();
+        int day = localDate.getDayOfMonth();
+        int year = localDate.getYear();
+        return String.format(Locale.ENGLISH, "%s %d, %d", monthName, day, year);
     }
 }

@@ -8,4 +8,111 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="LineDividerVertical">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">16dp</item>
+        <item name="android:layout_centerInParent">true</item>
+        <!--<item name="android:layout_marginLeft">8dp</item>-->
+        <!--<item name="android:layout_marginRight">8dp</item>-->
+        <item name="android:background">@color/colorGrey500</item>
+    </style>
+
+    <style name="TextDefault">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorGrey500</item>
+    </style>
+
+    <style name="TextDefaultTitle" parent="TextDefault">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textColor">@color/colorBlue300</item>
+    </style>
+
+    <style name="TextLocationData" parent="TextDefault">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="TextInfo" parent="TextDefaultTitle">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/colorGrey700</item>
+    </style>
+
+    <style name="TextDate" parent="TextDefault">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_margin">@dimen/margin_text_vertical</item>
+    </style>
+
+    <style name="SunriseDate" parent="TextDate">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorAmber600</item>
+    </style>
+
+    <style name="SunsetDate" parent="TextDate">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorDeepOrange500</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_alignBottom">@+id/date_layout</item>
+        <item name="android:layout_alignTop">@+id/date_layout</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorGrey700</item>
+        <item name="android:background">@drawable/button_shape</item>
+    </style>
+
+    <style name="LayoutWrapper">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="LayoutDateWrapper" parent="LayoutWrapper">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_toLeftOf">@+id/btn_search</item>
+        <item name="android:layout_toStartOf">@+id/btn_search</item>
+        <item name="android:background">@drawable/date_field_shape</item>
+    </style>
+
+    <style name="TextBlockVertical">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="TextBlockHorizontal">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="BlockInfo">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BlockSunriseSunsetInfo" parent="BlockInfo">
+        <item name="android:paddingTop">@dimen/half_text_margin_top_bottom</item>
+        <item name="android:paddingLeft">@dimen/text_margin_left_right</item>
+        <item name="android:paddingRight">@dimen/text_margin_left_right</item>
+        <item name="android:paddingBottom">@dimen/half_text_margin_top_bottom</item>
+        <item name="android:layout_marginTop">@dimen/text_margin_top_bottom</item>
+        <item name="android:background">@drawable/top_round_corners_layout_shape</item>
+    </style>
+
+    <style name="BlockLocationInfo" parent="BlockInfo">
+        <item name="android:paddingTop">@dimen/half_text_margin_top_bottom</item>
+        <item name="android:paddingBottom">@dimen/half_text_margin_top_bottom</item>
+        <item name="android:background">@drawable/location_layout_shape</item>
+    </style>
 </resources>

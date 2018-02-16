@@ -2,6 +2,7 @@ package com.example.alex.myplacesapp.service;
 
 import com.example.alex.myplacesapp.model.Location;
 import com.example.alex.myplacesapp.model.time_zone.TimeZoneData;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.sql.Timestamp;
 

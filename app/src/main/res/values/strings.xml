@@ -2,18 +2,26 @@
     <string name="app_name">MySunriseSunsetApp</string>
     <!--MyPlacesApp-->
     <string name="key_api">AIzaSyBTD9lfQJxJ3qR4deIvcFtL-Pr4WAJaEzU</string>
+
     <string name="key_browser">AIzaSyBZxTQy7_otvQFehArEDGb_KgfaA1O1acM</string>
     <string name="hint_location">Location:</string>
     <string name="hint_place">Place:</string>
     <string name="hint_latitude">Latitude:</string>
     <string name="hint_longtitude">Longtitude:</string>
-    <string name="hint_sunrise">Sunrise:</string>
-    <string name="hint_sunset">Sunset:</string>
+    <string name="text_sunrise">Sunrise time:</string>
+    <string name="text_sunset">Sunset time:</string>
     <string name="hint_timezone">Time zone:</string>
-    <string name="hint_date">Date:</string>
-    <string name="text_timezone">Time zone</string>
+    <string name="text_date">Date:</string>
+    <string name="text_latitude">Latitude: </string>
+    <string name="text_longtitude">Longtitude: </string>
+    <string name="text_timezone">Time zone: </string>
     <!--<string name="text_latitude">Latitude: %s</string>-->
     <!--<string name="text_longtitude">Longtitude: %s</string>-->
     <string name="btn_search_sunrise">Search for sunrise/sunset info</string>
     <string name="text_search">Search</string>
+    <string name="hint_text">Text</string>
+    <string name="hint_date">yyyy-MM-dd</string>
+    <string name="text_dayLength">Day length:</string>
+    <string name="hint_day_length">Day length:</string>
+    <string name="pick_place">Choose a place</string>
 </resources>

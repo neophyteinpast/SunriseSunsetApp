@@ -40,7 +40,6 @@ public class Location {
     }
 
     public Double round(Double value, int places) {
-
         BigDecimal bigDecimal = new BigDecimal(Double.toString(value));
         return bigDecimal.setScale(places, BigDecimal.ROUND_HALF_UP).doubleValue();
     }

@@ -1,113 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp"
     tools:context="com.example.alex.myplacesapp.MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <RelativeLayout
+        style="@style/LayoutWrapper"
+        android:id="@+id/date_block">
+
+        <RelativeLayout
+            android:id="@+id/date_layout"
+            style="@style/LayoutDateWrapper">
+            <TextView
+                android:id="@+id/tvDate"
+                style="@style/TextDate"
+                android:hint="@string/hint_date" />
+        </RelativeLayout>
+        <Button
+            style="@style/Button"
+            android:id="@+id/btn_search"
+            android:contentDescription="@string/text_search"
+            android:text="@string/text_search" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/BlockSunriseSunsetInfo"
+        android:id="@+id/sunrise_sunset_block"
+        android:layout_below="@+id/date_block">
 
         <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_date"
-            android:layout_marginRight="16dp"
-            android:layout_weight="1"/>
-        <Button
-            android:id="@+id/btn_getPlace"
-            android:text="@string/text_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="search"
-            android:layout_weight="1"/>
-    </LinearLayout>
+            style="@style/TextDefaultTitle"
+            android:id="@+id/tv_currentTimeInfo"
+            android:hint="@string/hint_text" />
 
-    <View
-        android:layout_height="1dp"
+        <LinearLayout
+            style="@style/TextBlockVertical"
+            android:id="@+id/sunrise_block"
+            android:layout_below="@+id/tv_currentTimeInfo">
+
+            <TextView
+                android:id="@+id/tvSunriseTime"
+                style="@style/TextDefaultTitle"
+                android:layout_margin="@dimen/margin_text_vertical"
+                android:textColor="@color/colorGrey700"
+                android:text="@string/text_sunrise" />
+            <TextView
+                android:id="@+id/tvSunrise"
+                style="@style/SunriseDate"
+                android:hint="@string/hint_date" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/TextBlockVertical"
+            android:id="@+id/sunset_block"
+            android:layout_below="@+id/tv_currentTimeInfo"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true">
+
+            <TextView
+                android:id="@+id/tvSunsetTime"
+                style="@style/TextDefaultTitle"
+                android:textColor="@color/colorGrey700"
+                android:layout_margin="@dimen/margin_text_vertical"
+                android:text="@string/text_sunset" />
+            <TextView
+                android:id="@+id/tvSunset"
+                style="@style/SunsetDate"
+                android:hint="@string/hint_date" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/TextInfo"
+            android:id="@+id/tv_dayLength"
+            android:hint="@string/hint_day_length"
+            android:layout_below="@+id/sunset_block"/>
+    </RelativeLayout>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
         android:layout_width="match_parent"
-        android:background="@color/colorAccent"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
-    <TextView
-        android:id="@+id/tvPlace"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_place"/>
-    <View
-        android:layout_height="1dp"
-        android:layout_width="match_parent"
-        android:background="@color/colorAccent"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_below="@+id/sunrise_sunset_block"
+        tools:layout="@layout/fragment_map" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/BlockLocationInfo"
+        android:id="@+id/location_block"
+        android:layout_alignParentBottom="true">
 
         <TextView
-            android:id="@+id/tvLat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_latitude"
-            />
-        <View
-            android:id="@+id/divider_vertical"
-            android:layout_height="16dp"
-            android:layout_width="1dp"
-            android:layout_centerInParent="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@color/colorAccent" />
-        <TextView
-            android:id="@+id/tvLng"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_longtitude"
-            android:layout_centerHorizontal="true"
-            android:layout_toRightOf="@id/divider_vertical"/>
-        <Button
-            android:id="@+id/btn_getTimeZone"
-            android:text="@string/text_timezone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_below="@id/divider_vertical"/>
-        <TextView
-            android:id="@+id/tvTimeZone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_timezone"
-            android:layout_below="@id/btn_getTimeZone"/>
+            style="@style/TextLocationData"
+            android:id="@+id/tvPlace"
+            android:hint="@string/hint_place"/>
 
+        <LinearLayout
+            android:id="@+id/latitude_line"
+            style="@style/TextBlockHorizontal"
+            android:layout_below="@+id/tvPlace">
+
+            <TextView
+                style="@style/TextDefaultTitle"
+                android:id="@+id/tvNameLat"
+                android:text="@string/text_latitude"/>
+            <TextView
+                style="@style/TextLocationData"
+                android:id="@+id/tvLat" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/longtitude_line"
+            style="@style/TextBlockHorizontal"
+            android:layout_below="@+id/latitude_line">
+
+            <TextView
+                style="@style/TextDefaultTitle"
+                android:id="@+id/tvNameLng"
+                android:text="@string/text_longtitude"
+                />
+            <TextView
+                style="@style/TextLocationData"
+                android:id="@+id/tvLng" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/time_zone_line"
+            style="@style/TextBlockHorizontal"
+            android:layout_below="@id/longtitude_line">
+
+            <TextView
+                style="@style/TextDefaultTitle"
+                android:id="@+id/tvNameTimeZone"
+                android:text="@string/text_timezone" />
+            <TextView
+                style="@style/TextLocationData"
+                android:id="@+id/tvTimeZone" />
+        </LinearLayout>
     </RelativeLayout>
-
-    <View
-        android:layout_height="1dp"
-        android:layout_width="match_parent"
-        android:background="@color/colorAccent"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tvSunrise"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_sunrise" />
-        <TextView
-            android:id="@+id/tvSunset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_sunset"
-            android:layout_centerInParent="true" />
-    </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>
