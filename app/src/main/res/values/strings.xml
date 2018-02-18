@@ -24,4 +24,7 @@
     <string name="text_dayLength">Day length:</string>
     <string name="hint_day_length">Day length:</string>
     <string name="pick_place">Choose a place</string>
+    <string name="enable_gps_message">Turn on GPS option?</string>
+    <string name="enable_btn">Enable</string>
+    <string name="cancel_btn">Cancel</string>
 </resources>
