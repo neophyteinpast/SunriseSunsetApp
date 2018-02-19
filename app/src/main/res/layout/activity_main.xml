@@ -3,16 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context="com.example.alex.myplacesapp.MainActivity">
 
     <RelativeLayout
         style="@style/LayoutWrapper"
-        android:id="@+id/date_block">
+        android:id="@+id/date_block"
+        android:layout_margin="@dimen/margin_left_right">
 
         <RelativeLayout
-            android:id="@+id/date_layout"
-            style="@style/LayoutDateWrapper">
+            style="@style/LayoutDateWrapper"
+            android:id="@+id/date_layout">
+
             <TextView
                 android:id="@+id/tvDate"
                 style="@style/TextDate"
@@ -33,7 +34,8 @@
         <TextView
             style="@style/TextDefaultTitle"
             android:id="@+id/tv_currentTimeInfo"
-            android:hint="@string/hint_text" />
+            android:hint="@string/hint_text"
+            android:textColor="@color/colorGrey900"/>
 
         <LinearLayout
             style="@style/TextBlockVertical"
@@ -78,19 +80,15 @@
             android:layout_below="@+id/sunset_block"/>
     </RelativeLayout>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_below="@+id/sunrise_sunset_block"
-        tools:layout="@layout/fragment_map" />
+    <View
+        style="@style/LineDividerHorizontal"
+        android:id="@+id/line"
+        android:layout_below="@+id/sunrise_sunset_block"/>
 
     <RelativeLayout
         style="@style/BlockLocationInfo"
         android:id="@+id/location_block"
-        android:layout_alignParentBottom="true">
+        android:layout_below="@+id/line">
 
         <TextView
             style="@style/TextLocationData"
@@ -140,4 +138,13 @@
                 android:id="@+id/tvTimeZone" />
         </LinearLayout>
     </RelativeLayout>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_below="@+id/location_block"
+        tools:layout="@layout/fragment_map" />
 </RelativeLayout>

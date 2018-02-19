@@ -8,13 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="LineDividerVertical">
-        <item name="android:layout_width">1dp</item>
-        <item name="android:layout_height">16dp</item>
-        <item name="android:layout_centerInParent">true</item>
-        <!--<item name="android:layout_marginLeft">8dp</item>-->
-        <!--<item name="android:layout_marginRight">8dp</item>-->
-        <item name="android:background">@color/colorGrey500</item>
+    <style name="LineDividerHorizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">@dimen/margin_left_right</item>
+        <item name="android:background">@color/colorAmber600</item>
     </style>
 
     <style name="TextDefault">
@@ -38,7 +36,7 @@
 
     <style name="TextInfo" parent="TextDefaultTitle">
         <item name="android:textSize">10sp</item>
-        <item name="android:textColor">@color/colorGrey700</item>
+        <item name="android:textColor">@color/colorGrey500</item>
     </style>
 
     <style name="TextDate" parent="TextDefault">
@@ -52,7 +50,7 @@
     </style>
 
     <style name="SunsetDate" parent="TextDate">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorDeepOrange500</item>
     </style>
 
@@ -66,7 +64,8 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/colorGrey700</item>
-        <item name="android:background">@drawable/button_shape</item>
+        <item name="android:drawableLeft">@drawable/ic_search_grey_24dp</item>
+        <item name="android:background">@drawable/button_selector</item>
     </style>
 
     <style name="LayoutWrapper">
@@ -106,8 +105,9 @@
         <item name="android:paddingLeft">@dimen/text_margin_left_right</item>
         <item name="android:paddingRight">@dimen/text_margin_left_right</item>
         <item name="android:paddingBottom">@dimen/half_text_margin_top_bottom</item>
-        <item name="android:layout_marginTop">@dimen/text_margin_top_bottom</item>
-        <item name="android:background">@drawable/top_round_corners_layout_shape</item>
+        <item name="android:layout_marginLeft">@dimen/margin_left_right</item>
+        <item name="android:layout_marginRight">@dimen/margin_left_right</item>
+        <item name="android:background">@drawable/all_round_corners_layout_shape</item>
     </style>
 
     <style name="BlockLocationInfo" parent="BlockInfo">

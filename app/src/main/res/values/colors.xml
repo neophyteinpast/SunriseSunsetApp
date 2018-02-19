@@ -5,6 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorGrey500">#9E9E9E</color>
     <color name="colorGrey700">#616161</color>
+    <color name="colorGrey900">#212121</color>
+    <color name="colorAmber200">#FFE082</color>
     <color name="colorAmber300">#FFD54F</color>
     <color name="colorAmber500">#FFC107</color>
     <color name="colorAmber600">#FFB300</color>
@@ -12,7 +14,7 @@
     <color name="colorBlue200">#90CAF9</color>
     <color name="colorBlue300">#64B5F6</color>
     <color name="colorBlue500">#2196F3</color>
-    <color name="colorBlue800">#E61565C0</color>
+    <color name="colorBlue800">#1565C0</color>
     <color name="colorBlue900">#0D47A1</color>
     <color name="colorWhite">#FFFFFF</color>
 </resources>

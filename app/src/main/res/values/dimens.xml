@@ -5,6 +5,7 @@
     <dimen name="corner_radius_date_field">6dp</dimen>
     <dimen name="margin_text_vertical">2dp</dimen>
     <dimen name="text_margin_left_right">32dp</dimen>
+    <dimen name="margin_left_right">16dp</dimen>
     <dimen name="text_margin_top_bottom">16dp</dimen>
     <dimen name="half_text_margin_top_bottom">8dp</dimen>
     <dimen name="text_size_default">10dp</dimen>
