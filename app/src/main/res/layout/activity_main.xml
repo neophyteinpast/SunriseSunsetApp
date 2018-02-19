@@ -35,7 +35,7 @@
             style="@style/TextDefaultTitle"
             android:id="@+id/tv_currentTimeInfo"
             android:hint="@string/hint_text"
-            android:textColor="@color/colorGrey900"/>
+            android:textColor="@color/colorGrey700"/>
 
         <LinearLayout
             style="@style/TextBlockVertical"

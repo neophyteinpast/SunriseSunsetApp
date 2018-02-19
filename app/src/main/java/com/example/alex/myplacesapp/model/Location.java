@@ -1,5 +1,8 @@
 package com.example.alex.myplacesapp.model;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -18,20 +21,19 @@ public class Location {
     @Expose
     private Double lng;
 
+    public Location() {}
+
+    public Location(@NonNull LatLng latLng) {
+        lat = latLng.latitude;
+        lng = latLng.longitude;
+    }
+
     public Double getLat() {
         return lat;
     }
 
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
-
     public Double getLng() {
         return lng;
-    }
-
-    public void setLng(Double lng) {
-        this.lng = lng;
     }
 
     @Override

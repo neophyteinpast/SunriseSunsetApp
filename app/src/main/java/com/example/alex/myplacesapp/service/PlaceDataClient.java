@@ -17,10 +17,4 @@ public interface PlaceDataClient {
             @Query("placeid") CharSequence placeId,
             @Query("key") String key
     );
-
-    @GET("details/json")
-    Call<ResponseBody> getPlaceResponse(
-            @Query("placeid") CharSequence placeId,
-            @Query("key") String key
-    );
 }

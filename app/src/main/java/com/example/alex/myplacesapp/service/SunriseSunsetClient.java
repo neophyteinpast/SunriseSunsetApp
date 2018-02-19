@@ -22,13 +22,4 @@ public interface SunriseSunsetClient {
                                          @Query("lng") double longtitude,
                                          @Query("date") String date,
                                          @Query("formatted") Integer formatted);
-    @GET()
-    Call<SunriseSunset> getSunriseSunsetMap(@Url String url,
-                                         @QueryMap Map<String, Object> map
-    );
-
-    @GET()
-    Call<ResponseBody> getResponse(@Url String url,
-            @QueryMap Map<String, Object> map
-    );
 }

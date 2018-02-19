@@ -113,6 +113,8 @@
     <style name="BlockLocationInfo" parent="BlockInfo">
         <item name="android:paddingTop">@dimen/half_text_margin_top_bottom</item>
         <item name="android:paddingBottom">@dimen/half_text_margin_top_bottom</item>
+        <item name="android:paddingLeft">@dimen/text_margin_left_right</item>
+        <item name="android:paddingRight">@dimen/text_margin_left_right</item>
         <item name="android:background">@drawable/location_layout_shape</item>
     </style>
 </resources>

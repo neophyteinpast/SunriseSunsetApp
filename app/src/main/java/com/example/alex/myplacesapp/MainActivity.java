@@ -63,6 +63,8 @@ import com.google.android.gms.tasks.Task;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,12 +75,13 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks, View.OnClickListener, OnMapReadyCallback,
-        GoogleMap.OnMyLocationButtonClickListener {
+        GoogleMap.OnMyLocationButtonClickListener, android.location.LocationListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int PLACE_PICKER_REQUEST = 1;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final int DEFAULT_ZOOM = 8;
+    private static final int DEFAULT_ZOOM = 5;
+    private static final int CURRENT_LOCATION_REQUEST = 1;
 
     private GoogleApiClient mGoogleApiClient;
     // The entry points to the Places API.
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity
 
     private GoogleMap mMap;
     private Place mPlace;
+    private int mFlagOfLocation = CURRENT_LOCATION_REQUEST;
     private android.location.Location mLastKnownLocation;
     //A default location (Dnipro, Ukraine)
     private LatLng mDefaultLocation = new LatLng(48.464717, 35.046183);
@@ -151,10 +155,14 @@ public class MainActivity extends AppCompatActivity
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        boolean enabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (enabled) {
-            showEnableGpsDialog();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 1, this);
     }
 
     // use Date Picker dialog
@@ -166,6 +174,48 @@ public class MainActivity extends AppCompatActivity
     public void showEnableGpsDialog() {
         GpsSettingDialog settingDialog = new GpsSettingDialog();
         settingDialog.show(getFragmentManager(), "gps_dialog");
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+        Log.d(TAG, "onProviderDisabled(): ");
+        boolean enabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!enabled) {
+            Log.d(TAG, "!enabled");
+            showEnableGpsDialog();
+            this.onResume();
+        }
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+        Log.d(TAG, "onProviderEnabled(): ");
+        Toast.makeText(getBaseContext(), "Gps is turned on!! ", Toast.LENGTH_SHORT).show();
+        if (mMap != null) {
+            updateLocationUI();
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+        Log.d(TAG, "onStatusChanged(): ");
+    }
+
+    @Override
+    public void onLocationChanged(android.location.Location location) {
+        long time = System.currentTimeMillis();
+        Date date = new Date(time);
+        String timestamp = String.format(Locale.getDefault(), "Time: %tH:%<tM:%<tS", date);
+        Log.d(TAG, "onLocationChanged(): " + timestamp);
+        makeUseOfNewLocation(location);
+    }
+
+    private void makeUseOfNewLocation(android.location.Location location) {
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+        updateLocationUI();
+        getDeviceLocation(new LatLng(lat, lng), 0);
+        Log.d(TAG, "makeUseOfNewLocation(): lat = " + lat + ", lng = " + lng);
     }
 
     // use Place Picker widget
@@ -236,6 +286,7 @@ public class MainActivity extends AppCompatActivity
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         TimeZoneClient timeZoneClient =
                 ServiceGenerator.createService(TimeZoneClient.class);
+
         Call<TimeZoneData> call =
                 timeZoneClient.getTimeZone(url, location, timestamp.getTime() / 1000,
                         resources.getString(R.string.key_browser));
@@ -246,10 +297,8 @@ public class MainActivity extends AppCompatActivity
                     Log.d(TAG, "response.isSuccessful(): true");
                     TimeZoneData timeZoneData = response.body();
                     String timeZone = timeZoneData.getTimeZoneId();
-
                     // search for sunrise sunset information
-                    searchForSunriseSunset(location,
-                            DateService.getDateFormat(mDateTv.getText().toString()), 0, timeZone);
+                    searchForSunriseSunset(location, DateService.getDateFormat(date), 0, timeZone);
                 }
             }
 
@@ -297,7 +346,8 @@ public class MainActivity extends AppCompatActivity
                 mLatTv.setText(String.valueOf(lat));
                 mLngTv.setText(String.valueOf(lng));
                 mTimezone.setText(timeZone);
-                updateLocationUI();
+
+                getDeviceLocation(new LatLng(lat, lng), 1);
             }
 
             @Override
@@ -313,7 +363,6 @@ public class MainActivity extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
     }
 
     @Override
@@ -332,6 +381,13 @@ public class MainActivity extends AppCompatActivity
             mGoogleApiClient.connect();
         }
         Log.d(TAG, "onStart():");
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause(): ");
+        super.onPause();
+        mLocationManager.removeUpdates(this);
     }
 
     @Override
@@ -358,7 +414,7 @@ public class MainActivity extends AppCompatActivity
         // connect to Google Timezone API
         updateLocationUI();
         // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
+        getDeviceLocation(null, 0);
     }
 
     /**
@@ -409,7 +465,6 @@ public class MainActivity extends AppCompatActivity
             if (mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
                 Log.d(TAG, " updateLocationUI():permission granted, setMyLocationEnabled(true)");
             } else {
                 Log.d(TAG, " updateLocationUI(): setMyLocationEnabled(false)");
@@ -423,46 +478,63 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void getDeviceLocation() {
+    private void getDeviceLocation(LatLng latLng, int flag) {
         Log.d(TAG, "getDeviceLocation()");
-
         /*
          * Get the best and most recent location of the device, which may be null in rare
          * cases when a location is not available.
          */
         try {
             if (mLocationPermissionGranted) {
+                if (flag == 1) {
+                    Log.d(TAG, "location != null");
+                    mMap.addMarker(new MarkerOptions().position(latLng));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
 
-                Task<android.location.Location> locationResult
-                        = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener<android.location.Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<android.location.Location> task) {
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            Log.d(TAG, "getDeviceLocation(): task.isSuccessful");
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = task.getResult();
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                            Log.d(TAG, "getDeviceLocation(): Location: lat = "
-                                    + mLastKnownLocation.getLatitude()
-                                    + ", lng = " + mLastKnownLocation.getLongitude());
-                        } else {
-                            Log.d(TAG, "Current location is null. Using defaults.");
-                            Log.e(TAG, "Exception: %s", task.getException());
-                            mMap.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                    Log.d(TAG, "getDeviceLocation(): Location: lat = "
+                            + latLng.latitude
+                            + ", lng = " + latLng.longitude);
+                } else {
+                    Log.d(TAG, "location == null");
+                    Task<android.location.Location> locationResult
+                            = mFusedLocationProviderClient.getLastLocation();
+                    locationResult.addOnCompleteListener(this, new OnCompleteListener<android.location.Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<android.location.Location> task) {
+                            if (task.isSuccessful() && task.getResult() != null) {
+                                Log.d(TAG, "getDeviceLocation(): task.isSuccessful");
+                                // Set the map's camera position to the current location of the device.
+                                mLastKnownLocation = task.getResult();
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(mLastKnownLocation.getLatitude(),
+                                                mLastKnownLocation.getLongitude())));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(mLastKnownLocation.getLatitude(),
+                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+
+                                LatLng latLng1 = new LatLng(mLastKnownLocation.getLatitude(),
+                                        mLastKnownLocation.getLongitude());
+
+                                Location location = new Location(latLng1);
+                                getTimeZoneData(location, mDateTv.getText().toString());
+
+                                Log.d(TAG, "getDeviceLocation(): Location: lat = "
+                                        + location.getLat() + ", lng = " + latLng1.longitude);
+                            } else {
+                                Log.d(TAG, "Current location is null. Using defaults.");
+                                Log.e(TAG, "Exception: %s", task.getException());
+                                mMap.moveCamera(CameraUpdateFactory
+                                        .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
-
 
     @Override
     public void onClick(View v) {
