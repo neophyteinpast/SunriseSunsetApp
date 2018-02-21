@@ -42,9 +42,17 @@
             android:id="@+id/sunrise_block"
             android:layout_below="@+id/tv_currentTimeInfo">
 
+            <ImageView
+                android:id="@+id/sunrise_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/sunrise_img"
+                android:background="@drawable/ic_sunrise"/>
+
             <TextView
                 android:id="@+id/tvSunriseTime"
-                style="@style/TextDefaultTitle"
+                style="@style/TextInfo"
                 android:layout_margin="@dimen/margin_text_vertical"
                 android:textColor="@color/colorGrey700"
                 android:text="@string/text_sunrise" />
@@ -61,9 +69,17 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true">
 
+            <ImageView
+                android:id="@+id/sunset_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/sunset_img"
+                android:background="@drawable/ic_sunset"/>
+
             <TextView
                 android:id="@+id/tvSunsetTime"
-                style="@style/TextDefaultTitle"
+                style="@style/TextInfo"
                 android:textColor="@color/colorGrey700"
                 android:layout_margin="@dimen/margin_text_vertical"
                 android:text="@string/text_sunset" />

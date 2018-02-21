@@ -10,6 +10,8 @@
     <string name="hint_longtitude">Longtitude:</string>
     <string name="text_sunrise">Sunrise time:</string>
     <string name="text_sunset">Sunset time:</string>
+    <string name="sunrise_img">Sunrise</string>
+    <string name="sunset_img">Sunset</string>
     <string name="hint_timezone">Time zone:</string>
     <string name="text_date">Date:</string>
     <string name="text_latitude">Latitude: </string>

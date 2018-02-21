@@ -45,12 +45,10 @@
     </style>
 
     <style name="SunriseDate" parent="TextDate">
-        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorAmber600</item>
     </style>
 
     <style name="SunsetDate" parent="TextDate">
-        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorDeepOrange500</item>
     </style>
 

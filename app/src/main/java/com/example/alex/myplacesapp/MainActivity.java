@@ -77,11 +77,11 @@ public class MainActivity extends AppCompatActivity
         GoogleApiClient.ConnectionCallbacks, View.OnClickListener, OnMapReadyCallback,
         GoogleMap.OnMyLocationButtonClickListener, android.location.LocationListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = MainActivity.class.getSimpleName();
     private static final int PLACE_PICKER_REQUEST = 1;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final int DEFAULT_ZOOM = 5;
-    private static final int CURRENT_LOCATION_REQUEST = 1;
+    private static final int CURRENT_LOCATION_REQUEST = 0;
 
     private GoogleApiClient mGoogleApiClient;
     // The entry points to the Places API.
@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity
 
     private GoogleMap mMap;
     private Place mPlace;
-    private int mFlagOfLocation = CURRENT_LOCATION_REQUEST;
     private android.location.Location mLastKnownLocation;
     //A default location (Dnipro, Ukraine)
     private LatLng mDefaultLocation = new LatLng(48.464717, 35.046183);
@@ -100,6 +99,7 @@ public class MainActivity extends AppCompatActivity
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private boolean mLocationPermissionGranted = false;
     private LocationManager mLocationManager;
+    private SupportMapFragment mapFragment;
 
     @BindView(R.id.btn_search)
     Button mSearchBtn;
@@ -162,16 +162,19 @@ public class MainActivity extends AppCompatActivity
                 != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 1, this);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1, this);
+        Log.d(TAG, "mLocationManager:" + mLocationManager);
     }
 
     // use Date Picker dialog
     public void showDatePickerDialog() {
+        Log.d(TAG, "showDatePickerDialog():");
         DialogFragment dialogFragment = new DatePickerFragment();
         dialogFragment.show(getFragmentManager(), "datePicker");
     }
 
     public void showEnableGpsDialog() {
+        Log.d(TAG, "showEnableGpsDialog():");
         GpsSettingDialog settingDialog = new GpsSettingDialog();
         settingDialog.show(getFragmentManager(), "gps_dialog");
     }
@@ -183,17 +186,15 @@ public class MainActivity extends AppCompatActivity
         if (!enabled) {
             Log.d(TAG, "!enabled");
             showEnableGpsDialog();
-            this.onResume();
         }
     }
 
     @Override
     public void onProviderEnabled(String s) {
         Log.d(TAG, "onProviderEnabled(): ");
-        Toast.makeText(getBaseContext(), "Gps is turned on!! ", Toast.LENGTH_SHORT).show();
-        if (mMap != null) {
-            updateLocationUI();
-        }
+        Toast.makeText(getBaseContext(), "Gps is turned on!!",
+                Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -214,7 +215,7 @@ public class MainActivity extends AppCompatActivity
         double lat = location.getLatitude();
         double lng = location.getLongitude();
         updateLocationUI();
-        getDeviceLocation(new LatLng(lat, lng), 0);
+        getDeviceLocation(new LatLng(lat, lng), CURRENT_LOCATION_REQUEST);
         Log.d(TAG, "makeUseOfNewLocation(): lat = " + lat + ", lng = " + lng);
     }
 
@@ -262,6 +263,7 @@ public class MainActivity extends AppCompatActivity
         call.enqueue(new Callback<PlaceData>() {
             @Override
             public void onResponse(Call<PlaceData> call, Response<PlaceData> response) {
+                Log.d(TAG, "onResponse():");
                 Toast.makeText(MainActivity.this, "Connected successful!", Toast.LENGTH_LONG).show();
                 PlaceData placeData = response.body();
                 Location location = placeData.getResult().getGeometry().getLocation();
@@ -272,8 +274,9 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<PlaceData> call, Throwable t) {
+                Log.d(TAG, "onFailure(): ");
                 // the network call was a failure
-                Toast.makeText(MainActivity.this, "Error:(", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Connection is failed!", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -346,7 +349,6 @@ public class MainActivity extends AppCompatActivity
                 mLatTv.setText(String.valueOf(lat));
                 mLngTv.setText(String.valueOf(lng));
                 mTimezone.setText(timeZone);
-
                 getDeviceLocation(new LatLng(lat, lng), 1);
             }
 
@@ -360,27 +362,30 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "onConnected():");
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
+        Log.d(TAG, "onConnectionSuspended():");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(this, "Error:(", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "onConnectionFailed():");
+        Toast.makeText(this, "The connection is failed!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart():");
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
+            Log.d(TAG, "mGoogleApiClient.connect():");
         }
-        Log.d(TAG, "onStart():");
     }
 
     @Override
@@ -388,14 +393,16 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onPause(): ");
         super.onPause();
         mLocationManager.removeUpdates(this);
+        Log.d(TAG, "mLocationManager.removeUpdates(this)");
     }
 
     @Override
     protected void onStop() {
+        Log.d(TAG, "onStop():");
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
+            Log.d(TAG, "mGoogleApiClient.disconnected");
         }
-        Log.d(TAG, "onStop():");
         super.onStop();
     }
 
@@ -414,13 +421,14 @@ public class MainActivity extends AppCompatActivity
         // connect to Google Timezone API
         updateLocationUI();
         // Get the current location of the device and set the position of the map.
-        getDeviceLocation(null, 0);
+        getDeviceLocation(null, CURRENT_LOCATION_REQUEST);
     }
 
     /**
      * Prompts the user for permission to use the device location.
      */
     private void getLocationPermission() {
+        Log.d(TAG, "getLocationPermission():");
         /*
          * Request location permission, so that we can get the location of the
          * device. The result of the permission request is handled by a callback,
@@ -458,16 +466,16 @@ public class MainActivity extends AppCompatActivity
     private void updateLocationUI() {
         Log.d(TAG, " updateLocationUI():");
         if (mMap == null) {
-            Log.d(TAG, " updateLocationUI(): mMap = null");
+            Log.d(TAG, "mMap = null");
             return;
         }
         try {
             if (mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                Log.d(TAG, " updateLocationUI():permission granted, setMyLocationEnabled(true)");
+                Log.d(TAG, "permission granted, setMyLocationEnabled(true)");
             } else {
-                Log.d(TAG, " updateLocationUI(): setMyLocationEnabled(false)");
+                Log.d(TAG, "setMyLocationEnabled(false)");
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 mLastKnownLocation = null;
@@ -488,6 +496,7 @@ public class MainActivity extends AppCompatActivity
             if (mLocationPermissionGranted) {
                 if (flag == 1) {
                     Log.d(TAG, "location != null");
+                    mMap.clear();
                     mMap.addMarker(new MarkerOptions().position(latLng));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
 
@@ -505,6 +514,8 @@ public class MainActivity extends AppCompatActivity
                                 Log.d(TAG, "getDeviceLocation(): task.isSuccessful");
                                 // Set the map's camera position to the current location of the device.
                                 mLastKnownLocation = task.getResult();
+
+                                mMap.clear();
                                 mMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(mLastKnownLocation.getLatitude(),
                                                 mLastKnownLocation.getLongitude())));
