@@ -1,5 +1,6 @@
 package com.example.alex.myplacesapp.service;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.threeten.bp.LocalDate;
@@ -54,6 +55,9 @@ public class DateService {
                 LocalDateTime.parse(input, DateTimeFormatter.ofPattern(PARSE_DATE_FORMAT));
         OffsetDateTime offsetDateTime = OffsetDateTime.of(localDateTime, ZoneOffset.of("+00:00"));
 
+        if (timeZone == null) {
+            return null;
+        }
         ZoneId zoneId = ZoneId.of(timeZone);
         ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, zoneId);
         ZoneOffset realZoneOffset = zonedDateTime.getOffset(); // create zoneOffset of +05:00
@@ -70,10 +74,14 @@ public class DateService {
         LocalTime localTime = LocalTime.ofSecondOfDay(seconds);
         int hours = localTime.getHour();
         int minutes = localTime.getMinute();
-        return String.format("Day length: %d hours, %d minutes", hours, minutes);
+        return String.format(Locale.getDefault(), "Day length: %d hours, %d minutes", hours, minutes);
     }
 
     public static String getFormattedDateTime(String dateInString, String timeZone) {
+        Log.d(TAG, "timeZone = " + timeZone);
+        if (timeZone == null) {
+            return null;
+        }
         ZoneId zoneId = ZoneId.of(timeZone);
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         LocalDateTime localDateTime = LocalDateTime.now(zoneId);

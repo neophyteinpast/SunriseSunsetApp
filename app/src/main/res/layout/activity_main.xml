@@ -94,6 +94,12 @@
             android:id="@+id/tv_dayLength"
             android:hint="@string/hint_day_length"
             android:layout_below="@+id/sunset_block"/>
+
+        <TextView
+            style="@style/TextLink"
+            android:id="@+id/tv_sunrise_sunset_link"
+            android:text="@string/txtCredits"
+            android:layout_below="@+id/tv_dayLength" />
     </RelativeLayout>
 
     <View
@@ -109,7 +115,7 @@
         <TextView
             style="@style/TextLocationData"
             android:id="@+id/tvPlace"
-            android:hint="@string/hint_place"/>
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/latitude_line"

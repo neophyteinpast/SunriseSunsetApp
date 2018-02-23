@@ -2,21 +2,16 @@ package com.example.alex.myplacesapp;
 
 import android.Manifest;
 import android.app.DialogFragment;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.location.Criteria;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -38,24 +33,15 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.PlaceLikelihood;
-import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
-import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -75,7 +61,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks, View.OnClickListener, OnMapReadyCallback,
-        GoogleMap.OnMyLocationButtonClickListener, android.location.LocationListener {
+        android.location.LocationListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private static final int PLACE_PICKER_REQUEST = 1;
@@ -86,20 +72,17 @@ public class MainActivity extends AppCompatActivity
     private GoogleApiClient mGoogleApiClient;
     // The entry points to the Places API.
     private PlaceDataClient mPlaceDataClient;
-    private GeoDataClient mGeoDataClient;
-    private PlaceDetectionClient mPlaceDetectionClient;
 
     private GoogleMap mMap;
     private Place mPlace;
     private android.location.Location mLastKnownLocation;
-    //A default location (Dnipro, Ukraine)
-    private LatLng mDefaultLocation = new LatLng(48.464717, 35.046183);
+    //A default location (Sydney, Australia)
+    private LatLng mDefaultLocation = new LatLng(-33.8688197,  151.2092955);
 
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private boolean mLocationPermissionGranted = false;
     private LocationManager mLocationManager;
-    private SupportMapFragment mapFragment;
 
     @BindView(R.id.btn_search)
     Button mSearchBtn;
@@ -114,7 +97,6 @@ public class MainActivity extends AppCompatActivity
     TextView mSunsetTv;
     @BindView(R.id.tv_dayLength)
     TextView mDayLength;
-
     @BindView(R.id.tvPlace)
     TextView mPlaceTv;
     @BindView(R.id.tvTimeZone)
@@ -134,9 +116,8 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApiIfAvailable(LocationServices.API)
-                .addApiIfAvailable(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
+                .addApiIfAvailable(LocationServices.API)
                 .enableAutoManage(this, this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -148,10 +129,10 @@ public class MainActivity extends AppCompatActivity
         mDateTv.setText(DateService.getCurrentDate()); // set current date
         mPlaceDataClient = ServiceGenerator.createService(PlaceDataClient.class);
 
-        // Construct a GeoDataClient.
-        mGeoDataClient = Places.getGeoDataClient(this, null);
-        // Construct a PlaceDetectionClient.
-        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
+//        // Construct a GeoDataClient.
+//        mGeoDataClient = Places.getGeoDataClient(this, null);
+//        // Construct a PlaceDetectionClient.
+//        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -162,8 +143,7 @@ public class MainActivity extends AppCompatActivity
                 != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1, this);
-        Log.d(TAG, "mLocationManager:" + mLocationManager);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 1, this);
     }
 
     // use Date Picker dialog
@@ -184,7 +164,6 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onProviderDisabled(): ");
         boolean enabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!enabled) {
-            Log.d(TAG, "!enabled");
             showEnableGpsDialog();
         }
     }
@@ -252,6 +231,7 @@ public class MainActivity extends AppCompatActivity
     private void displayPlace(Place place) {
         Log.d(TAG, "displayPlace():");
         if (place == null) return;
+        mPlaceTv.setVisibility(View.VISIBLE);
         mPlaceTv.setText(place.getAddress());
     }
 
@@ -299,6 +279,12 @@ public class MainActivity extends AppCompatActivity
                 if (response.isSuccessful()) {
                     Log.d(TAG, "response.isSuccessful(): true");
                     TimeZoneData timeZoneData = response.body();
+                    if (timeZoneData.getStatus().equalsIgnoreCase("ZERO_RESULTS")) {
+                        Toast.makeText(MainActivity.this,
+                                "You should choose point on the land!",
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     String timeZone = timeZoneData.getTimeZoneId();
                     // search for sunrise sunset information
                     searchForSunriseSunset(location, DateService.getDateFormat(date), 0, timeZone);
@@ -362,7 +348,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "onConnected():");
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
@@ -417,11 +403,12 @@ public class MainActivity extends AppCompatActivity
 
         // get location permissions
         getLocationPermission();
-        // Turn on the My Location layer and the related control on the map.
-        // connect to Google Timezone API
-        updateLocationUI();
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation(null, CURRENT_LOCATION_REQUEST);
+        if (mLocationPermissionGranted) {
+            // Turn on the My Location layer and the related control on the map.
+            updateLocationUI();
+            // Get the current location of the device and set the position of the map.
+            getDeviceLocation(null, CURRENT_LOCATION_REQUEST);
+        }
     }
 
     /**
@@ -434,7 +421,7 @@ public class MainActivity extends AppCompatActivity
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
          */
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+        if (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
@@ -466,16 +453,13 @@ public class MainActivity extends AppCompatActivity
     private void updateLocationUI() {
         Log.d(TAG, " updateLocationUI():");
         if (mMap == null) {
-            Log.d(TAG, "mMap = null");
             return;
         }
         try {
             if (mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                Log.d(TAG, "permission granted, setMyLocationEnabled(true)");
             } else {
-                Log.d(TAG, "setMyLocationEnabled(false)");
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 mLastKnownLocation = null;
@@ -523,14 +507,6 @@ public class MainActivity extends AppCompatActivity
                                         new LatLng(mLastKnownLocation.getLatitude(),
                                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
 
-                                LatLng latLng1 = new LatLng(mLastKnownLocation.getLatitude(),
-                                        mLastKnownLocation.getLongitude());
-
-                                Location location = new Location(latLng1);
-                                getTimeZoneData(location, mDateTv.getText().toString());
-
-                                Log.d(TAG, "getDeviceLocation(): Location: lat = "
-                                        + location.getLat() + ", lng = " + latLng1.longitude);
                             } else {
                                 Log.d(TAG, "Current location is null. Using defaults.");
                                 Log.e(TAG, "Exception: %s", task.getException());
@@ -562,9 +538,4 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onMyLocationButtonClick() {
-        Log.d(TAG, "onMyLocationButtonClick(): ");
-        return true;
-    }
 }

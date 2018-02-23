@@ -28,9 +28,7 @@
         <item name="android:textColor">@color/colorBlue300</item>
     </style>
 
-    <style name="TextLocationData" parent="TextDefault">
-        <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:layout_gravity">center_horizontal</item>
+    <style name="TextLocationData" parent="TextDefaultTitle">
         <item name="android:textColor">@color/colorWhite</item>
     </style>
 
@@ -42,6 +40,15 @@
     <style name="TextDate" parent="TextDefault">
         <item name="android:textSize">16sp</item>
         <item name="android:layout_margin">@dimen/margin_text_vertical</item>
+    </style>
+
+    <style name="TextLink" parent="TextInfo">
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginTop">@dimen/margin_text_vertical</item>
+        <item name="android:autoLink">web</item>
     </style>
 
     <style name="SunriseDate" parent="TextDate">
@@ -111,8 +118,8 @@
     <style name="BlockLocationInfo" parent="BlockInfo">
         <item name="android:paddingTop">@dimen/half_text_margin_top_bottom</item>
         <item name="android:paddingBottom">@dimen/half_text_margin_top_bottom</item>
-        <item name="android:paddingLeft">@dimen/text_margin_left_right</item>
-        <item name="android:paddingRight">@dimen/text_margin_left_right</item>
+        <item name="android:paddingLeft">@dimen/margin_left_right</item>
+        <item name="android:paddingRight">@dimen/margin_left_right</item>
         <item name="android:background">@drawable/location_layout_shape</item>
     </style>
 </resources>
