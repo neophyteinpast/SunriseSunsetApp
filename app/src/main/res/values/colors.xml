@@ -17,4 +17,5 @@
     <color name="colorBlue800">#1565C0</color>
     <color name="colorBlue900">#0D47A1</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
 </resources>

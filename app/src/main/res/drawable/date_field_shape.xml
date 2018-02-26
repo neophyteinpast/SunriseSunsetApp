@@ -10,11 +10,4 @@
         android:bottomLeftRadius="@dimen/corner_radius_date_field"
         android:topLeftRadius="@dimen/corner_radius_date_field">
     </corners>
-
-    <padding
-        android:left="@dimen/left_right_padding_date_field"
-        android:right="@dimen/left_right_padding_date_field"
-        android:top="@dimen/left_right_padding_date_field"
-        android:bottom="@dimen/left_right_padding_date_field">
-    </padding>
 </shape>

@@ -15,8 +15,8 @@
             android:id="@+id/date_layout">
 
             <TextView
-                android:id="@+id/tvDate"
                 style="@style/TextDate"
+                android:id="@+id/tvDate"
                 android:hint="@string/hint_date" />
         </RelativeLayout>
         <Button
@@ -43,22 +43,20 @@
             android:layout_below="@+id/tv_currentTimeInfo">
 
             <ImageView
+                style="@style/ImageIcon"
                 android:id="@+id/sunrise_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/sunrise_img"
                 android:background="@drawable/ic_sunrise"/>
 
             <TextView
-                android:id="@+id/tvSunriseTime"
                 style="@style/TextInfo"
+                android:id="@+id/tvSunriseTime"
                 android:layout_margin="@dimen/margin_text_vertical"
                 android:textColor="@color/colorGrey700"
                 android:text="@string/text_sunrise" />
             <TextView
-                android:id="@+id/tvSunrise"
                 style="@style/SunriseDate"
+                android:id="@+id/tvSunrise"
                 android:hint="@string/hint_date" />
         </LinearLayout>
 
@@ -70,22 +68,20 @@
             android:layout_alignParentRight="true">
 
             <ImageView
+                style="@style/ImageIcon"
                 android:id="@+id/sunset_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/sunset_img"
                 android:background="@drawable/ic_sunset"/>
 
             <TextView
-                android:id="@+id/tvSunsetTime"
                 style="@style/TextInfo"
+                android:id="@+id/tvSunsetTime"
                 android:textColor="@color/colorGrey700"
                 android:layout_margin="@dimen/margin_text_vertical"
                 android:text="@string/text_sunset" />
             <TextView
-                android:id="@+id/tvSunset"
                 style="@style/SunsetDate"
+                android:id="@+id/tvSunset"
                 android:hint="@string/hint_date" />
         </LinearLayout>
 
@@ -118,8 +114,8 @@
             android:visibility="gone"/>
 
         <LinearLayout
-            android:id="@+id/latitude_line"
             style="@style/TextBlockHorizontal"
+            android:id="@+id/latitude_line"
             android:layout_below="@+id/tvPlace">
 
             <TextView
@@ -132,8 +128,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/longtitude_line"
             style="@style/TextBlockHorizontal"
+            android:id="@+id/longtitude_line"
             android:layout_below="@+id/latitude_line">
 
             <TextView
@@ -147,8 +143,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/time_zone_line"
             style="@style/TextBlockHorizontal"
+            android:id="@+id/time_zone_line"
             android:layout_below="@id/longtitude_line">
 
             <TextView

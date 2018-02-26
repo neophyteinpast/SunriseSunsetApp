@@ -129,10 +129,6 @@ public class MainActivity extends AppCompatActivity
         mDateTv.setText(DateService.getCurrentDate()); // set current date
         mPlaceDataClient = ServiceGenerator.createService(PlaceDataClient.class);
 
-//        // Construct a GeoDataClient.
-//        mGeoDataClient = Places.getGeoDataClient(this, null);
-//        // Construct a PlaceDetectionClient.
-//        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);

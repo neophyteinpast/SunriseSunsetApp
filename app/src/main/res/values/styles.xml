@@ -37,9 +37,13 @@
         <item name="android:textColor">@color/colorGrey500</item>
     </style>
 
-    <style name="TextDate" parent="TextDefault">
+    <style name="TextDate">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:gravity">center_horizontal</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:layout_margin">@dimen/margin_text_vertical</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
 
     <style name="TextLink" parent="TextInfo">
@@ -51,11 +55,13 @@
         <item name="android:autoLink">web</item>
     </style>
 
-    <style name="SunriseDate" parent="TextDate">
+    <style name="SunriseDate" parent="TextDefault">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_margin">@dimen/margin_text_vertical</item>
         <item name="android:textColor">@color/colorAmber600</item>
     </style>
 
-    <style name="SunsetDate" parent="TextDate">
+    <style name="SunsetDate" parent="SunriseDate">
         <item name="android:textColor">@color/colorDeepOrange500</item>
     </style>
 
@@ -121,5 +127,11 @@
         <item name="android:paddingLeft">@dimen/margin_left_right</item>
         <item name="android:paddingRight">@dimen/margin_left_right</item>
         <item name="android:background">@drawable/location_layout_shape</item>
+    </style>
+
+    <style name="ImageIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
     </style>
 </resources>
