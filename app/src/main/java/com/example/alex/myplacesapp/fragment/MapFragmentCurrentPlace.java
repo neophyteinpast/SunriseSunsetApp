@@ -32,23 +32,6 @@ public class MapFragmentCurrentPlace extends SupportMapFragment {
                              @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_map, null);
-
-//        if (mMapFragment == null) {
-//            mMapFragment = SupportMapFragment.newInstance();
-//            mMapFragment.getMapAsync(new OnMapReadyCallback() {
-//                @Override
-//                public void onMapReady(GoogleMap googleMap) {
-//                    LatLng latLng = new LatLng(1.289545, 103.849972);
-//                    googleMap.addMarker(new MarkerOptions().position(latLng)
-//                    .title("Singapore"));
-//                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-//                }
-//            });
-//        }
-//
-//        // R.id.map is a FrameLayout, not a Fragment
-//        getChildFragmentManager().beginTransaction().replace(R.id.map_fragment_container, mMapFragment).commit();
-
         return rootView;
     }
 }
